@@ -1,0 +1,68 @@
+#!/bin/bash
+#-------
+#
+# Antes de ejecutar cambiar estas 3 opciones, lea la Leyenda como referencia.
+#    BACKUPDIR
+#    DEST
+#    FILES
+#
+# Cómo ejecutar el script backupsystem
+#
+# 1. Copiar el script a la carpeta bin y dar permiso de lectura y ejecución
+#
+# $ sudo cp -v backupsystem /bin
+# $ sudo chmod a+rx /bin/backupsystem
+#
+# 2. Ejecutar como ROOT
+#
+# $ backupsystem
+#
+#
+# Leyenda:
+# BACKUPDIR => El directorio fuente de donde se hará el respaldo.
+#
+#              Ejemplo: direcotrio raíz "/"
+#
+# DEST => Ruta/Directorio absoluto de destino donde se hará el respaldo
+#         
+# FILES => Dirección absoluta al Archivo .txt que contiene los
+#          archivos/directorios que se respaldán
+#
+#          Ejemplo: copiar la carpeta /etc
+#              Contenido del archivo "respaldar_directorios_archivos.txt"
+#              Se escribiría sin slash(/) por delante
+# ------------------------------
+#              etc
+# ------------------------------
+#          Solo estaríamos respaldando la carpeta /etc
+#                          
+# OPTS => Opciones: estas opciones realiza una sincronización de todos los archivos
+#         modificados en la fuente. Ej. si borro algo en la fuente, se eliminará en el destino
+#         La primera copia realiza la copia completa sin modificaciones, en el segundo respaldo
+#         solo sincroniza y actualizan por los nuevos o modificados, y los no se mantienen en
+#         el destino
+#
+# RUTA => Solo muestra el direcotrio actual en el que te encuentras
+#         como referencia cuando termine el respaldo.
+#
+echo
+read -p "Respaldo con rsync. Continuar? (y / n) : " ans
+if [ "$ans" == "y" ]
+then
+	BACKDIR="/"
+	DEST="/mnt_EJEMPLO/TU_RUTA_DESTINO/"
+	FILES="/home/usurario/Documentos/respaldar_direcotrios_archivos.txt"
+	OPTS="-h --progress --stats -r -tgo -p -l -D --update --delete-after --files-from=$FILES"
+	RUTA="$(pwd)"
+	sudo rsync $OPTS $BACKDIR $DEST
+	echo
+	echo -e "\e[33m|== rsync Respaldo sistema ==|\e[0m"
+	echo -e "\e[33m==== Directorio Origen  ==>\e[0m $BACKDIR"
+	echo -e "\e[33m==== Directorio Destino ==>\e[0m $DEST"
+	echo -e "\e[33m==== Archivos incluidos ==>\e[0m $FILES"
+	echo -e "\e[33m==== Comando y Opciones ==>\e[0m rsync $OPTS $BACKDIR $DEST"
+	echo -e "\e[33m==== --delete-after ==>\e[0m Escaneará y eliminará el contenido que no se encuentra en el origen una vez haya realizado la copia y transeferencia de archivos"
+	echo -e "\e[33m==== Tu actual ruta es  ==>\e[0m $RUTA"
+	echo
+	echo -e "\e[33m DONAR bitcoin:3PBNDeLUfdXqJLnNSWLXkcRuRzBmDJ84EG \e[0m"
+fi
