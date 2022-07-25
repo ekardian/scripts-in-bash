@@ -6,7 +6,7 @@ IMPORTANTE!!!
 
 Las instrucciones de como usar los scripts/alias se encuentran comentados dentro de los scripts.
 
-Agregando los scripts al directorio /bin
+Agregando los scripts al directorio `/bin`
 ---------
 
 ```
@@ -42,4 +42,4 @@ $ source ~/.bashrc
 LISTA DE SCRIPTS
 ----------------
 
-- [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. El script sincroniza solo los archivos modificados después de la primera copia.
+- [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Por obviedad la primera sincronización copia todos los archivos).
