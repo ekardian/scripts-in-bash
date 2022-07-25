@@ -13,14 +13,14 @@ Agregando los scripts al directorio /bin
 $ sudo cp -v <script> /bin
 $ sudo chmod a+rx /bin/<script>
 ```
-Agregando los alias al .bash_aliases de tu /home/usuario
+Agregando los alias al `.bash_aliases` de tu `/home/usuario`
 ---------
 
 ```
 $ vim .bashrc
 ```
 
-Descomente las siguientes líneas del archivo .bashrc y cree el archivo .bash_aliases
+Descomente las siguientes líneas del archivo `.bashrc` y cree el archivo .bash_aliases
 
 ```
  if [ -f "${HOME}/.bash_aliases" ]; then
@@ -34,6 +34,10 @@ Descomente las siguientes líneas del archivo .bashrc y cree el archivo .bash_al
 
 ```
 $ touch .bash_aliases
+```
+Agregado los alias/funciones al `.bash_aliases`, actualice el bash ejecutando:
+```
+$ source ~/.bashrc
 ```
 LISTA DE SCRIPTS
 ----------------
