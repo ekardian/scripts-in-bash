@@ -43,3 +43,7 @@ LISTA DE SCRIPTS
 ----------------
 
 - [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Por obviedad la primera sincronización copia todos los archivos y desde la segunda sincronización solos los archivos modificados).
+
+LISTA DE ALIAS
+----------------
+- rsync + sshpass
