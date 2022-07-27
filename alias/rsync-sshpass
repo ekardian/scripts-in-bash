@@ -1,0 +1,73 @@
+#rsync + sshpass
+#
+# Importante!!! Lea detalladamente y reemplaze las rutas, usuarios, contraseñas y cree las carpetas donde se les sugiere.
+#
+# Si ha creado carpetas/archivos donde el propietario es el superusuario root ejecute con $ sudo rsync-sshpass
+# si la el Mysql tiene una contraseña, cuando ejecute con sudo, le mostrará introducir la contraseña sudo para el root y del MySQL.
+#
+function rsync-sshpass {
+	echo
+  #Reemplaze su por su ip fuente
+	echo -e "\e[33m Copiando PC 192.168.1.x \e[0m"
+	echo -e "\e[33m Ejecutar respaldo de PC y DB's Mysql (y/n): \e[0m";read OPTION
+	if [ "$OPTION" == y ]
+	then
+		#START Backup Base de Datos MySQL
+    # Reemplazar "<usuario_db>" por usuario de mysql y <contraseña>
+    # ejemplo
+    # myuser=JohnDoe
+    # mypass=1234568990
+		myuser=<usuario_db>
+		mypass=<contraseña>
+
+		args="-u"$myuser" -p"$mypass" --add-drop-database --add-locks --create-options --complete-insert --comments --disable-keys --dump-date --extended-insert --quick --routines --triggers"                                                         
+		mysql -u$myuser -p$mypass -e 'show databases' | grep -Ev "(Database|information_schema)" > databases.list
+
+		while read DB
+		do
+            # Cree la carpeta Documentos/Backup_base_de_datos
+            # $ mkdir Backup_base_de_datos
+            # Escriba la ruta donde se guardaran los volcados de la base de datos en los cuales tiene privilegios a su usuario
+            # se volcaran con nombre dump_mibasededatos.sql
+            #
+        		dump="/home/<usuario>/Documentos/Backup_base_de_datos/dump_"$DB".sql"
+		        echo -n $dump"... "
+		        mysqldump ${args} $DB > $dump
+		        echo "OK."
+		done < databases.list
+
+		rm -fr databases.list
+		#END Backup Base de Datos MySQL
+		
+		#START RSYNC + SSHPASS
+		ME="<contraseña_del_usuario_en_destino"
+		BACKDIR="/home/<usuario-local>/"
+    #
+    # El archivo backup_dirs_files.txt debe contener las carpetas y archivos que quiere respaldar a la máquina remota. Ej.
+    # Queremos respaldar la carpeta Documentos ya que la fuente BACKDIR="/home/<usuario>/ es la raiz desde donde se puede copiar
+    # si quisieramos copiar desde el root (/) de carpetas como el /etc, sería BACKDIR="/"
+    #
+    # contenido de backup_dirs_files.txt
+    # sin slash (/) al comienzo
+    #
+    # Documentos
+    # .bashrc
+    #
+    # esto copiarpia todo la carpeta Documentos y el archivo oculto .bashrc
+    #
+		FILES="/home/<usuario-local>/Documentos/backup_dirs_files.txt"
+    #
+    # Opciones de respaldo, vea man rsync para más opciones.
+    #
+		OPTS="-h --progress --stats -r -tgo -p -l -D --update --delete-after --files-from=$FILES"
+    #
+    # Ejemplo del equipo a donde se respaldará
+    # $DEST="johndoe@192.168.1.5:/home/johndoe/Descargas/"
+    #
+		DEST="<usuario-destino>@<ip-destino>:/home/<ruta_del_equipo_remoto_donde_se_respaldará>/"
+		sshpass -p $ME rsync $OPTS $BACKDIR $DEST
+	else
+		echo -e "\e[33m Cancelado \e[0m"
+	fi
+	echo -e "\e[33m DONE \e[3m"
+}
