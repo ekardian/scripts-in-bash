@@ -1,5 +1,11 @@
 #rsync + sshpass
+# Te sirvió el script? genial!!!  Sin compromisos me podrías invitar un tecito enviándome una donacińo (5$ dólares americanos) por Wertern Union a:
 #
+# Nombre: Erwin Marcell Alayn
+# Apellidos: Castedo Plantarrosa
+# Destino/Ciudad: Yacuiba, Departamento de Tarija, Bolivia
+# Correo electrónico: blkid@protonmail.com
+# 
 # Importante!!! Lea detalladamente y reemplaze las rutas, usuarios, contraseñas y cree las carpetas donde se les sugiere.
 #
 # Si ha creado carpetas/archivos donde el propietario es el superusuario root ejecute con $ sudo rsync-sshpass
