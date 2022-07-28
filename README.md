@@ -46,4 +46,4 @@ LISTA DE SCRIPTS
 
 LISTA DE ALIAS
 ----------------
-- rsync + sshpass
+- [rsync-sshpass](scripts/rsync-sshpass) - Copia/Respalda/Sincroniza a otro equipo en la red de forma diferencial(respalda modificados manteniendo los no modificados en la fuente y destino.
