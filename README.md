@@ -67,7 +67,6 @@ LISTA DE SCRIPTS
     folder-A12345
   El script copiará solo las carpetas que coinciden con estos dos cadenas de texto, como se vé abajo
   
-  a. Ruta para copiar con sus carpetas y archivos
 ````  
      source
            |-- folder1
@@ -81,7 +80,7 @@ LISTA DE SCRIPTS
                                  |---- folder-Annnn
                                                    |--- file3
                                                    |--- file....
-  b. Folder-Destino
+      Folder-Destino
                    |--- folder-A123
                                    |--- file1
                                    |--- file....
