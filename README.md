@@ -51,8 +51,17 @@ Te sirvió algún script? genial!!!  Sin compromisos me podrías invitar un teci
 LISTA DE SCRIPTS
 ----------------
 
-- [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Por obviedad la primera sincronización copia todos los archivos y desde la segunda sincronización solos los archivos modificados).
-- rsync-archive-list - script en bash con rsync para copiar carpetas con nombres con espacio que coincidan con los listados en un archivo.txt. Ejemplo: Copiaré solo las carpetas que contengan A123 y A12345, estas dos cadenas que buscaré estarán contenidas en un archivo.txt.
+- [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Por obviedad la primera sincronización copia todos los archivos y desde la segunda sincronización solos los archivos modificados). Testeado en Linux Mint 21.2 y Debian 12
+- rsync-archive-list - script en bash con rsync para copiar carpetas con nombres con espacio que coincidan con los listados en un archivo.txt. Testeado con Linux Mint 21.2 y Debian 12
+
+  Requerimientos:
+  - rsync
+    ````
+    $ sudo apt install rsync
+    $ sudo apt install dialog
+    ````
+  - dialog
+  Ejemplo: Copiaré solo las carpetas que contengan A123 y A12345, estas dos cadenas que buscaré estarán contenidas en un archivo.txt.
   Contenido del archivo.txt
     folder-A123
     folder-A12345
