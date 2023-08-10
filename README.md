@@ -52,7 +52,35 @@ LISTA DE SCRIPTS
 ----------------
 
 - [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Por obviedad la primera sincronización copia todos los archivos y desde la segunda sincronización solos los archivos modificados).
-
+- rsync-archive-list - script en bash con rsync para copiar carpetas con nombres con espacio que coincidan con los listados en un archivo.txt. Ejemplo: Copiaré solo las carpetas que contengan A123 y A12345, estas dos cadenas que buscaré estarán contenidas en un archivo.txt.
+  Contenido del archivo.txt
+    folder-A123
+    folder-A12345
+  El script copiará solo las carpetas que coinciden con estos dos cadenas de texto, como se vé abajo
+  
+  a. Ruta para copiar con sus carpetas y archivos
+````  
+     source
+           |-- folder1
+                      |-- folder2  
+                                 |--- folder-A123
+                                                 |--- file1
+                                                 |--- file....
+                                 |--- folder-A12345
+                                                   |--- file2
+                                                   |--- file....
+                                 |---- folder-Annnn
+                                                   |--- file3
+                                                   |--- file....
+  b. Folder-Destino
+                   |--- folder-A123
+                                   |--- file1
+                                   |--- file....
+                   |--- folder-A12345
+                                   |--- file2
+                                   |--- file....
+````                 
+               
 LISTA DE ALIAS
 ----------------
 - [rsync-sshpass](alias/rsync-sshpass) - Copia/Respalda/Sincroniza a otro equipo en la red de forma diferencial(respalda modificados manteniendo los no modificados en la fuente y destino.
