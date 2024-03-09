@@ -41,9 +41,9 @@ $ source ~/.bashrc
 ```
 DONACIÒN
 --------
-Te sirvió algún script? genial!!!  Sin compromisos me podrías invitar un tecito enviándome una donación (5$ dólares americanos) por Wertern Union a:
+Te sirvió algún script? genial!!!  Sin compromisos me podrías invitar un tecito enviándome una donación (5$ dólares americanos) por Western Union a:
 
-- Nombre: Erwin Marcell Alayn.
+- Nombre: Erwin Marcell Alayn
 - Apellidos: Castedo Plantarrosa
 - Destino/Ciudad: Yacuiba, Departamento de Tarija, Bolivia
 - Notifìcame al Correo electrónico: blkid@protonmail.com
