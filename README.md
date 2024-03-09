@@ -55,7 +55,7 @@ LISTA DE SCRIPTS
 - [dryncs](scripts/dryncs.src) - script en bash con rsync y dialog para copiar carpetas con nombres con espacio que coincidan con los listados en un archivo.txt. Testeado con Linux Mint 21.2 y Debian 12. Corre en Linux y Windows con cygwin. Instalación, solo clonar el repositorio y dar permisos de ejecutable a los archivos: `chmod a+rx dryncs.src`. Ejecute en consola con `./dryncs.src`.
 
   Requerimientos:
-  - [rsync](https://rsync.samba.org/)(linux/windows cygwin), [dialog](https://linux.die.net/man/1/dialog)(linux/windows cygwin, [lsblk](https://www.geeksforgeeks.org/lsblk-command-in-linux-with-examples/)(linux), [sed](https://www.gnu.org/software/sed/manual/sed.html)
+  - [rsync](https://rsync.samba.org/)(linux/windows cygwin), [dialog](https://linux.die.net/man/1/dialog)(linux/windows cygwin), [lsblk](https://www.geeksforgeeks.org/lsblk-command-in-linux-with-examples/)(linux), [sed](https://www.gnu.org/software/sed/manual/sed.html)(linux/windows cygwin)
     ````
     $ sudo apt install rsync
     $ sudo apt install dialog
