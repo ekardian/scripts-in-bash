@@ -1,0 +1,26 @@
+#!/bin/bash
+# Requirement: rename
+# install: sudo apt install rename
+
+echo -e "\e[1;33m Ruta del directorio para buscar: \e[0m"; read -r dirclips
+echo -e "\e[1;33m Archivo a buscar, nombre completo original: \e[0m"; read -r item
+echo -e "\e[1;33m ID sin espacios para agregar antes de la extensión (ej. A1): \e[0m"; read -r iditem
+c="$iditem"
+export c
+if test -f "$item"; then
+        find "$dirclips" -name "$item" -exec rename 's/(.+)\.(.+)/$1-\Q$ENV{c}\E.$2/' "{}" \;
+        echo -e "\e[1;33m Se agregó: -$iditem  al archivo: $item"
+else
+        echo -e "\e[1;33m No existe el archivo: \e[0m" $item
+fi
+
+# DONATION
+# --------
+# Works for you? grate!!!! You can give me a donation via Wester Union, thanks XD
+#
+# - Name: Erwin Marcell Alayn
+# - Last Name: Castedo Plantarrosa
+# - City/Country: Yacuiba, Departamento de Tarija, Bolivia
+# - Notify me by email : blkid@protonmail.com
+#
+# Te sirvió algún script? genial!!!  Sin compromisos me podrías invitar un tecito enviándome una donación (5$ dólares americanos) por Western Union.
