@@ -39,15 +39,16 @@ Una vez agregado los alias/funciones al `.bash_aliases`, actualice el bash ejecu
 ```
 $ source ~/.bashrc
 ```
-DONACIÒN
+DONATION
 --------
-Te sirvió algún script? genial!!!  Sin compromisos me podrías invitar un tecito enviándome una donación (5$ dólares americanos) por Western Union a:
+Works for you? grate!!!! You can give me a donation via Wester Union, thanks XD
 
-- Nombre: Erwin Marcell Alayn
-- Apellidos: Castedo Plantarrosa
-- Destino/Ciudad: Yacuiba, Departamento de Tarija, Bolivia
-- Notifìcame al Correo electrónico: blkid@protonmail.com
+- Name: Erwin Marcell Alayn
+- Last Name: Castedo Plantarrosa
+- City/Country: Yacuiba, Departamento de Tarija, Bolivia
+- Notify me by email : blkid@protonmail.com
 
+Te sirvió algún script? genial!!!  Sin compromisos me podrías invitar un tecito enviándome una donación (5$ dólares americanos) por Western Union.
 LISTA DE SCRIPTS
 ----------------
 
