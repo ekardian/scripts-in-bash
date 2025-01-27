@@ -16,7 +16,7 @@
 #
 # How to use
 #
-# Copy the script serialize-files.sh to the dir
+# Copy the script recursive-serialize-files-to-end-README-BEFORE-TO-USE101-F0-F0-0-Docs0-F0.sh to the dir
 # where you want rename/serialize files
 #
 # $ chmod +x serialize-files.sh
