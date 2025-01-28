@@ -1,27 +1,42 @@
 # scripts-in-bash
-#### Scripts - Alias varios y automatizaciones
+#### Scripts - Alias - automation
 
-IMPORTANTE!!!
-----------
+IMPORTANT!!!
+-
 
+English
+The instructions there are inside scripts/aloias
+
+Español
 Las instrucciones de como usar los scripts/alias se encuentran comentados dentro de los scripts.
 
-Agregando los scripts al directorio `/bin`
----------
+Adding scripts to `/bin` directory
+-
 
 ```
 $ sudo cp -v <script> /bin
 $ sudo chmod a+rx /bin/<script>
 ```
-Agregando los alias al `.bash_aliases` de tu `/home/usuario`
----------
+
+Try the script in a directory
+-
+
+```
+$ mkdir testing
+$ cp -v script.sh testing/
+$ cd testing/
+$ chmod 755 script.sh
+$ ./script.sh
+```
+
+Adding alias to `.bash_aliases` to your `/home/usuario`
+-
 
 ```
 $ vim .bashrc
 ```
 
-Descomente las siguientes líneas del archivo `.bashrc` y cree el archivo .bash_aliases
-
+Uncomment the lines from `.bashrc` and create the `.bash_aliases` file
 ```
  if [ -f "${HOME}/.bash_aliases" ]; then
    source "${HOME}/.bash_aliases"
@@ -35,7 +50,8 @@ Descomente las siguientes líneas del archivo `.bashrc` y cree el archivo .bash_
 ```
 $ touch .bash_aliases
 ```
-Una vez agregado los alias/funciones al `.bash_aliases`, actualice el bash ejecutando:
+Once added the alias/functions to `.bash_aliases`, update executing
+
 ```
 $ source ~/.bashrc
 ```
@@ -53,7 +69,8 @@ LISTA DE SCRIPTS
 ----------------
 
 - [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Por obviedad la primera sincronización copia todos los archivos y desde la segunda sincronización solos los archivos modificados). Testeado en Linux Mint 21.2 y Debian 12
-               
+- [add-numbers-before-filename.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-filename.sh) - Add Letter and numbers before the file name for serialized files
+- [add-numbers-before-extension.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-extension.sh) - Add Letter and numbers before the extension for serialized files
 LISTA DE ALIAS
 ----------------
 - [rsync-sshpass](alias/rsync-sshpass) - Copia/Respalda/Sincroniza a otro equipo en la red de forma diferencial(respalda modificados manteniendo los no modificados en la fuente y destino.
