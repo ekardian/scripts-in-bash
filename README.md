@@ -71,6 +71,8 @@ LISTA DE SCRIPTS
 - [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Por obviedad la primera sincronización copia todos los archivos y desde la segunda sincronización solos los archivos modificados). Testeado en Linux Mint 21.2 y Debian 12
 - [add-numbers-before-filename.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-filename.sh) - Add Letter and numbers before the file name for serialized files
 - [add-numbers-before-extension.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-extension.sh) - Add Letter and numbers before the extension for serialized files
+- [search-add-strings-before-extension-filename.sh.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/search-add-strings-before-extension-filename.sh) - Search in directories and add Letter and numbers before the extension for serialized file
+  
 LISTA DE ALIAS
 ----------------
 - [rsync-sshpass](alias/rsync-sshpass) - Copia/Respalda/Sincroniza a otro equipo en la red de forma diferencial(respalda modificados manteniendo los no modificados en la fuente y destino.
