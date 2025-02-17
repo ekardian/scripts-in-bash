@@ -73,6 +73,7 @@ LISTA DE SCRIPTS
 - [add-numbers-before-filename.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-filename.sh) - Add Letter and numbers before the file name for serialized files
 - [add-numbers-before-extension.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-extension.sh) - Add Letter and numbers before the extension for serialized files
 - [search-add-strings-before-extension-filename.sh.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/search-add-strings-before-extension-filename.sh) - Search in directories and add Letter and numbers before the extension for serialized file
+- [extract-strings-numbers-from-filenames.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/extract-strings-numbers-from-filenames.sh) - Extract after the last symbol '-' and before the extension file the strings/letters and numbers
   
 LISTA DE ALIAS
 ----------------
