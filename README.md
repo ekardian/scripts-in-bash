@@ -69,7 +69,7 @@ Te sirvió algún script? genial!!!  Sin compromisos me podrías invitar un teci
 LISTA DE SCRIPTS
 ----------------
 
-- [backupsystem](scripts/backupsystem) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Por obviedad la primera sincronización copia todos los archivos y desde la segunda sincronización solos los archivos modificados). Testeado en Linux Mint 21.2 y Debian 12
+- [backupsystem](scripts/ccbackupuser.sh) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Desde la segunda sincronización solos los archivos modificados son actualizados, sin borrar los otros archivos no modificados). Testeado en Linux Mint 21.2, Debian 12, Debian 13.
 - [add-numbers-before-filename.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-filename.sh) - Add Letter and numbers before the file name for serialized files
 - [add-numbers-before-extension.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-extension.sh) - Add Letter and numbers before the extension for serialized files
 - [add-numbers-at-the-end-directory.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-at-the-end-directory.sh) Add Letter and numbers at the end directory
