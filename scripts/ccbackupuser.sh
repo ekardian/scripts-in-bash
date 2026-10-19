@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/usr/bin/sh
 #  - ccbackupuser.sh - Back up and synchronize with rsync
 #  
 #  Copyright @ 2023-2024, BIOS Tech <blkid@protonmail.com>
@@ -63,32 +62,16 @@
 #        AUTHOR: Erwin Castedo <blkid@protonmail.com>
 #  ORGANIZATION: BIOS Tech <bioswork@gmail.com>
 #       CREATED: 2025/06/28 21:00
-#      REVISION: 2.2 (2026/10/17 18:57)
+#      REVISION: 2.3 (2026/10/17 18:57)
+#                changed to posix compatibility
+#                fixed issues
 #
 #      DONATION: https://github.com/ekardian/dryncsnsx#donation
 #
 #===============================================================================
 
-co="\e[0m"
-# Yellow
-ci="\e[1;33m"
-
-# Messages
 # Lines
 li="---------------------------------------------------------"
-
-# Donation
-donation="${ci}\n Script Terminado\n Donar\n https://github.com/ekardian/dryncsnsx#donation\n${co}"
-
-# starting script
-
-# Formateando tabla
-
-  width=31
-  divider=-------------------------------
-  divider=$divider$divider$divider
-  header="%14s \n"
-  format="%14s \n"
 
 # Capture the key combo exit INT -> CTRL+C
 
@@ -114,13 +97,13 @@ exit_script () {
   printf "  https://github.com/ekardian/dryncsnsx#dontaino\n"
   printf "%s\n" "--------------------------------------------------"
   printf "\n"
-  exit 0
+  exit 
 }
 
 exit_success () {
   printf "\n"
   printf "%s\n" "--------------------------------------------------"
-  printf "  Script Terminado\n\n"
+  printf "  Script ejecutado satisfactoriamente\n\n"
   printf "  Donar\n"
   printf "  https://github.com/ekardian/dryncsnsx#dontaino\n"
   printf "%s\n" "--------------------------------------------------"
@@ -146,7 +129,7 @@ check_packages () {
     printf "  Instale los paquetes y configure las rutas si lo requiere en\n"
     printf "  ~/.ccbackupuser/ccbackupuser_conf\n"
     printf "  y vuelva a ejecutar el script.\n\n"
-    exit 1
+    exit 
   fi
 }
 
@@ -155,18 +138,17 @@ check_packages () {
 check_user () {
   printf "\n" 
   printf "%s\n> " "- Usuario con el que desea ejecutar: "; read -r usertmp
-  
-  # Modo silencioso. Enviando salida de errar (2) a la impresión de salida (1)
-  
-  veruser=$(id -u "$usertmp" &>/dev/null 2>&1)
+  id -u "$usertmp" > /dev/null
+
   exitcode=$?
   if [ "$exitcode" = 0 ]; then
-    myhome=$(sudo -u "$usertmp" -H bash -c 'printf "$HOME\n"')
+    command -v sudo > /dev/null; cmdsudo=$?
+    if [ ! "$cmdsudo" = 0 ]; then printf "\n  %s\n" "* (FALLO) El paquete sudo no está instalado"; exit_script; fi
+    myhome=$(sudo -u "$usertmp" -H sh -c 'printf "$HOME\n"')
   else
-    printf "\n * Usuario no existe\n   escriba un usuario existente o cree uno.\n\n"
-    printf "Presione Enter para salir..."; read
+    printf "\n  * Usuario no existe\n    escriba un usuario existente o cree uno.\n\n"
+    printf "Presione Enter para salir..."; read -r backtomenu
     exit_script
-    exit 1
   fi
 }
 
@@ -176,24 +158,17 @@ check_config () {
   CONFIG_FILE="${myhome}/.ccbackupuser/ccbackupuser_conf"
   
   if [ ! -f "$CONFIG_FILE" ];then
-    width=67
     printf "\n  * (FALLO) ARCHIVO DE CONFIGURACIÓN\n\n"
-    divider===============================
+    divider="=============================="
     divider=$divider$divider$divider
     
-    header=" %-18s %-37s %-10s \n"
-    format=" %-18s %-36s %-10s \n"
-    
-    printf "$header" "Tipo de Archivo" "Archivos de Configuración" "Estado"
-    
-    printf "%$width.${width}s\n" "$divider"
-    
-    printf "$format" \
+    printf " %-18s %-37s %-10s \n" "Tipo de Archivo" "Archivos de Configuración" "Estado"
+    printf "%67.67s\n" "$divider"
+    printf " %-18s %-36s %-10s \n" \
     "Directorio" "/.ccbackupuser/" "NO EXISTE" \
     "Archivo" "/.ccbackupuser/ccbackupuser_conf" "NO EXISTE" \
     "Archivo" "/.ccbacupuser/backup_user_dir.txt" "NO EXISTE"
     printf "%s\n" "-------------------------------------------------------------------"
-    
     printf "%s\n> " "- Crear archivos de configuración? (s/n): "; read -r me
   
     if [ "$me" = s ]; then
@@ -252,18 +227,17 @@ NANO="/usr/bin/nano"
 EOF
 
       touch "${myhome}"/.ccbackupuser/backup_user_dir.txt
-      "$SUDO" chown -R "$usertmp":"$usertmp" "${myhome}"/.ccbackupuser/
-  
       . "${myhome}"/.ccbackupuser/ccbackupuser_conf 
+      "$SUDO" chown -R "$usertmp":"$usertmp" "${myhome}"/.ccbackupuser/
   
       printf "\n%s\n %s\n %s\n %s\n" " - Directorio y archivos creados:" "  ${myhome}/.ccbackupuser/" "  ${myhome}/.ccbackupuser/ccbackupuser_conf" "  ${myhome}/.ccbackupuser/backup_user_dir.txt"
       printf "\n%s\n %s\n\n" " - Ahora Configure el archivo ccbackupuser_conf y backup_user_dir.txt" "y ejeciute de nuevo el script ccbackupuser.sh"
       exit
     else
       printf "\n%s\n" "-------------------------------------------------------------------"
-      printf "Script Cancelado, cree manualmente el archivo ~/.ccbackupuser_conf\n"
+      printf " Script Cancelado, se requiere generar el archivo de configuración\n"
       printf "%s\n\n" "-------------------------------------------------------------------"
-      exit 1
+      exit 
     fi
   else
   . "${myhome}"/.ccbackupuser/ccbackupuser_conf 
@@ -323,9 +297,9 @@ respaldo () {
 
 startornot () {
   printf "\n%s\n> " "- Iniciar Respaldo? Si [s] , No [n]:"; read -r voyono
+
   if [ "$voyono" = n ]; then
     exit_script
-    exit 0
   fi
 }
 
@@ -333,7 +307,7 @@ startornot () {
 
 print_config () {
   "$BATCAT" "${myhome}"/.ccbackupuser/ccbackupuser_conf
-  printf "\n%s\n> " "- Editar archivo de configuración? Si (s), No (n):"; read sino
+  printf "\n%s\n> " "- Editar archivo de configuración? Si (s), No (n):"; read -r sino
   if [ "$sino" = s ]; then
     "$NANO" "${myhome}"/.ccbackupuser/ccbackupuser_conf
   fi
@@ -343,7 +317,8 @@ print_config () {
 
 print_backup_files () {
   "$BATCAT" "$FILES"
-  printf "\n%s\n> " "- Editar lista de archivos ha copiar? Si (s), No (n):"; read sino
+  printf "\n%s\n> " "- Editar lista de archivos ha copiar? Si (s), No (n):"; read -r sino
+  
   if [ "$sino" = s ]; then
     "$NANO" "$FILES" 
   fi
@@ -352,7 +327,7 @@ print_backup_files () {
 # Ayuda
 
 ayuda () {
-  cat <<EOF
+  cat <<EOF > "${myhome}"/.ccbackupuser/ayuda.txt
                   AYUDA
 ==============================================
 
@@ -512,7 +487,12 @@ menu_header () {
 #  printf "%s\n" "  Check updates - https://github.com/ekardian/scripts-in-bash"
   printf "%s\n\n" "-----------------------------------------"
 }
-
+menu_header
+check_user
+#check_config
+if [ ! -f "${myhome}"/.ccbackupuser/ayuda.txt ]; then
+  ayuda
+fi
 while true; do
   clear
  
@@ -520,8 +500,11 @@ while true; do
   
   # Impresion tabla
   
-  printf "$header" "                 Menú"
-  printf "%$width.${width}s\n\n" "         $divider"
+  divider="-------------------------------"
+  divider=$divider$divider$divider
+
+  printf "%19s \n" "                 Menú"
+  printf "%31.31s\n\n" "        $divider"
 
   # Opciones
   
@@ -533,27 +516,28 @@ while true; do
   printf "%s\n\n" "  6. Salir"
   printf "%s" "Escoje una opción: "
 
-  read choice
+  read -r choice
 
   case $choice in
     1)
       clear
       menu_header
       printf "    1. Respaldar Archivos\n"
-      check_user
       check_config
       check_packages
       printf "\n%s\n  %s\n  %s\n> " "- Configuró el archivo de configuración?" "* ${myhome}/.ccbackupuser/ccbackupuser_conf"  "Si [s] continúa, No [n] sale del script"; read -r ans
+      
       if [ "$ans" = s ]; then
         printf "\n%s\n> " "- Configuró para respaldo remoto? Si (s) , No (n):"; read -r cremoto
         if [ "$cremoto" = n ]; then
           if [ ! -d "$DEST" ]; then
             printf "%s\n" "$li" 
-            printf "  * (FALLO) Directorio destino no existe.\n    ${DEST}\n\n  Revise la configuración:\n  /home/<user>/.ccbackupuser/ccbackupuser_conf\n  /home/<user>/.ccbackupuser/backup_user_dir.txt\n"
+            printf "  %s\n    %s\n\n  %s\n  %s\n  %s\n" "* (FALLO) Directorio destino no existe." "${DEST}"  "Revise la configuración:"  "/home/<user>/.ccbackupuser/ccbackupuser_conf"  "/home/<user>/.ccbackupuser/backup_user_dir.txt"
+            #printf "  * (FALLO) Directorio destino no existe.\n    ${DEST}\n\n  Revise la configuración:\n  /home/<user>/.ccbackupuser/ccbackupuser_conf\n  /home/<user>/.ccbackupuser/backup_user_dir.txt\n"
             printf "%s\n" "$li" 
 
             printf "\n  Script Terminado.\n\n"
-            exit 1
+            exit 
           fi
           startornot
           respaldo
@@ -570,7 +554,6 @@ while true; do
       clear
       menu_header
       printf "    2. Ver Archivo de Configuración\n"
-      check_user
       check_config
       check_packages
       print_config
@@ -579,7 +562,6 @@ while true; do
       clear
       menu_header
       printf "    3. Ver Archivos/Directorios que respaldará\n"
-      check_user
       check_config
       check_packages
       print_backup_files
@@ -588,7 +570,6 @@ while true; do
       clear
       menu_header
       printf "    4. Tamaño de Archivos que se Respaldarán\n"
-      check_user
       check_config
       check_packages
       sizefrombackup
@@ -596,7 +577,8 @@ while true; do
     5)
       clear
       menu_header
-      ayuda
+      more -d "${myhome}"/.ccbackupuser/ayuda.txt
+      printf "\n%s\n" "- Presiona Enter para volver al menu."; read -r backtomenu
       ;;
     6)
       clear
@@ -608,7 +590,6 @@ while true; do
   esac
 
   printf "\n"
-  printf "%s\n" "Presionar Enter para continuar ..."
-  read
+  printf "%s\n" "  Presionar Enter para continuar ..."; read -r backtomenu
 
 done
