@@ -62,8 +62,8 @@
 #        AUTHOR: Erwin Castedo <blkid@protonmail.com>
 #  ORGANIZATION: BIOS Tech <bioswork@gmail.com>
 #       CREATED: 2025/06/28 21:00
-#      REVISION: 2.3 (2026/10/17 18:57)
-#                changed to posix compatibility
+#      REVISION: 2.4 (2026/10/19 23:14)
+#                new option for backup configuration
 #                fixed issues
 #
 #      DONATION: https://github.com/ekardian/dryncsnsx#donation
@@ -231,7 +231,7 @@ EOF
       "$SUDO" chown -R "$usertmp":"$usertmp" "${myhome}"/.ccbackupuser/
   
       printf "\n%s\n %s\n %s\n %s\n" " - Directorio y archivos creados:" "  ${myhome}/.ccbackupuser/" "  ${myhome}/.ccbackupuser/ccbackupuser_conf" "  ${myhome}/.ccbackupuser/backup_user_dir.txt"
-      printf "\n%s\n %s\n\n" " - Ahora Configure el archivo ccbackupuser_conf y backup_user_dir.txt" "y ejeciute de nuevo el script ccbackupuser.sh"
+      printf "\n%s\n %s\n\n" " - Ejecute de nuevo el script, configure desde opciones del menú" "o manualmente ~/.ccbackupuser/ccbackupuser_conf y ~/.ccbackupuser/backup_user_dir.txt"
       exit
     else
       printf "\n%s\n" "-------------------------------------------------------------------"
@@ -296,7 +296,7 @@ respaldo () {
 # Iniciando si copia a un archivo local o a un remoto
 
 startornot () {
-  printf "\n%s\n> " "- Iniciar Respaldo? Si [s] , No [n]:"; read -r voyono
+  printf "\n%s\n> " "- Iniciar Respaldo? Si (s) , No (n):"; read -r voyono
 
   if [ "$voyono" = n ]; then
     exit_script
@@ -477,6 +477,18 @@ EOF
 
 }
 
+# Respaldar configuración
+
+backup_config () {
+  TIMESTAMP=$(date +%Y-%m-%d_%T)
+  myzip=$(command -v zip)
+  "$myzip" "${myhome}/ccbackupuser-$TIMESTAMP.zip" -rq "${myhome}/.ccbackupuser"
+
+  printf "\n\n%s\n\n" "- Respaldo de configuración guardado en ${myhome}"
+
+  printf "%s\n" "Presionar Enter para continuar ..."; read backtomenu
+}
+
 # Menu
 
 menu_header () {
@@ -484,12 +496,11 @@ menu_header () {
   printf "%s\n" "-----------------------------------------"
   printf "%s\n" "  ccbackupuser.sh - Respaldos con rsync"
   printf "%s\n" "   Respalda/Sincroniza en Local/Remoto"
-#  printf "%s\n" "  Check updates - https://github.com/ekardian/scripts-in-bash"
   printf "%s\n\n" "-----------------------------------------"
 }
 menu_header
 check_user
-#check_config
+check_config
 if [ ! -f "${myhome}"/.ccbackupuser/ayuda.txt ]; then
   ayuda
 fi
@@ -509,11 +520,12 @@ while true; do
   # Opciones
   
   printf "%s\n" "  1. Respaldar Archivos"
-  printf "%s\n" "  2. Ver Archivo de Configuración"
-  printf "%s\n" "  3. Ver Archivos/Directorios que respaldará"
+  printf "%s\n" "  2. Ver/Editar Archivo de Configuración"
+  printf "%s\n" "  3. Ver/Editar Archivos que respaldará"
   printf "%s\n" "  4. Tamaño de Archivos que se Respaldarán"
-  printf "%s\n" "  5. Ayuda"
-  printf "%s\n\n" "  6. Salir"
+  printf "%s\n" "  5. Respaldar configuración"
+  printf "%s\n" "  6. Ayuda"
+  printf "%s\n\n" "  7. Salir"
   printf "%s" "Escoje una opción: "
 
   read -r choice
@@ -523,7 +535,6 @@ while true; do
       clear
       menu_header
       printf "    1. Respaldar Archivos\n"
-      check_config
       check_packages
       printf "\n%s\n  %s\n  %s\n> " "- Configuró el archivo de configuración?" "* ${myhome}/.ccbackupuser/ccbackupuser_conf"  "Si [s] continúa, No [n] sale del script"; read -r ans
       
@@ -533,7 +544,6 @@ while true; do
           if [ ! -d "$DEST" ]; then
             printf "%s\n" "$li" 
             printf "  %s\n    %s\n\n  %s\n  %s\n  %s\n" "* (FALLO) Directorio destino no existe." "${DEST}"  "Revise la configuración:"  "/home/<user>/.ccbackupuser/ccbackupuser_conf"  "/home/<user>/.ccbackupuser/backup_user_dir.txt"
-            #printf "  * (FALLO) Directorio destino no existe.\n    ${DEST}\n\n  Revise la configuración:\n  /home/<user>/.ccbackupuser/ccbackupuser_conf\n  /home/<user>/.ccbackupuser/backup_user_dir.txt\n"
             printf "%s\n" "$li" 
 
             printf "\n  Script Terminado.\n\n"
@@ -554,7 +564,6 @@ while true; do
       clear
       menu_header
       printf "    2. Ver Archivo de Configuración\n"
-      check_config
       check_packages
       print_config
       ;;
@@ -562,7 +571,6 @@ while true; do
       clear
       menu_header
       printf "    3. Ver Archivos/Directorios que respaldará\n"
-      check_config
       check_packages
       print_backup_files
       ;;
@@ -570,17 +578,22 @@ while true; do
       clear
       menu_header
       printf "    4. Tamaño de Archivos que se Respaldarán\n"
-      check_config
       check_packages
       sizefrombackup
       ;;
     5)
       clear
       menu_header
+      printf "    5. Respaldar configuración"
+      backup_config
+      ;;
+    6)
+      clear
+      menu_header
       more -d "${myhome}"/.ccbackupuser/ayuda.txt
       printf "\n%s\n" "- Presiona Enter para volver al menu."; read -r backtomenu
       ;;
-    6)
+    7)
       clear
       exit_script
       ;;
