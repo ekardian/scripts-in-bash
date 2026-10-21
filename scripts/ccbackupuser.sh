@@ -51,20 +51,19 @@
 #   DESCRIPTION: Advance backup for user home with rsync command 
 #
 #       OPTIONS: in /home/user/.ccbackupuser/
-#  REQUIREMENTS: rsync, batcat(bat), nano
+#  REQUIREMENTS: rsync, nano, sudo
 #                sudo privileges for sytem files backup
 #          BUGS: None
 #         NOTES: Tested in debian 12(bookworm), debian 13(trixie)
 #                maybe work in windows with cygwin
 #                Could run and all GNU and BSD system changing the
 #                variable command paths in ~/.ccbackupuser/ccbackupuser_conf
-#                RSYNC NANO BATCAT SUDO
+#                RSYNC NANO SUDO
 #        AUTHOR: Erwin Castedo <blkid@protonmail.com>
 #  ORGANIZATION: BIOS Tech <bioswork@gmail.com>
 #       CREATED: 2025/06/28 21:00
-#      REVISION: 2.4 (2026/10/19 23:14)
-#                new option for backup configuration
-#                fixed issues
+#      REVISION: 2.6 (2026/10/20 18:55)
+#                removed batcat program 
 #
 #      DONATION: https://github.com/ekardian/dryncsnsx#donation
 #
@@ -114,21 +113,20 @@ exit_success () {
 # Verificando si requerimientos de paquetes están instalados
 
 check_packages () {
-  if [ ! -f "$RSYNC" ] || [ ! -f "$NANO" ] || [ ! -f "$BATCAT" ] ||  [ ! -f "$SUDO" ]; then
+  if [ ! -f "$RSYNC" ] || [ ! -f "$NANO" ] || [ ! -f "$SUDO" ]; then
     printf "\n"
     printf "%s\n" "  ccbackupuser.sh - Script para Respaldos con rsync"
     printf "%s\n" "-----------------------------------------------------------------"
     printf "\n"
-    printf "  * (FALLO) Se requiere paquetes rsync, sudo, bat, nano\n\n"
-    printf "%16s %s\n" "Debian:" "apt install rsync sudo bat nano"
-    printf "%16s %s\n" "RedHat/Fedora:" "dnf install rsync sudo bat nano"
-    printf "%16s %s\n" "Arch:" "pacman -S rsync sudo bat nano"
-    printf "%16s %s\n" "Gentoo:" "emerge -a rsync sudo bat nano"
-    printf "%16s %s\n" "Alpine:" "apk rsync sudo bat nano"
-    printf "%16s %s\n\n" "Suse:" "zypper isntall rsync sudo bat nano"
-    printf "  Instale los paquetes y configure las rutas si lo requiere en\n"
-    printf "  ~/.ccbackupuser/ccbackupuser_conf\n"
-    printf "  y vuelva a ejecutar el script.\n\n"
+    printf "  %s\n\n" "* (FALLO) Se requiere paquetes rsync, sudo, nano"
+    printf "%16s %s\n" "Debian:" "apt install rsync sudo nano"
+    printf "%16s %s\n" "RedHat/Fedora:" "dnf install rsync sudo nano"
+    printf "%16s %s\n" "Arch:" "pacman -S rsync sudo nano"
+    printf "%16s %s\n" "Gentoo:" "emerge -a rsync sudo nano"
+    printf "%16s %s\n" "Alpine:" "apk rsync sudo nano"
+    printf "%16s %s\n\n" "Suse:" "zypper isntall rsync sudo nano"
+    printf "  %s\n" "Instale los paquetes y configure las rutas si lo requiere en"
+    printf "  %s\n\n" "~/.ccbackupuser/ccbackupuser_conf y ejectue de nuevo."
     exit 
   fi
 }
@@ -192,7 +190,6 @@ BACKUPDIR="${myhome}/"
 # REMOTO. Ejemplo respaldar a un equipo remoto con ip 192.168.1.5
 # con un usuario remoto llamado 'johndoe' a su directorio Descargas
 # DEST="johndoe@192.168.1.5:/home/johndoe/Descargas/"
-
 DEST="/ruta-de-destino/"
 
 # Archivo contenedor de directorios y archivos que quiere respaldar
@@ -218,10 +215,6 @@ OPTS="-h --progress --stats -r -tgo -p -l -D --update --delete-after --files-fro
 # sudo
 SUDO="/usr/bin/sudo"
 
-# bat (El paquete se llama bat, pero el comando batcat)
-# Instale en debian: apt install batcat
-BATCAT="/usr/bin/batcat"
-
 # nano
 NANO="/usr/bin/nano"
 EOF
@@ -243,8 +236,6 @@ EOF
   . "${myhome}"/.ccbackupuser/ccbackupuser_conf 
   fi
 }
-
-# Iniciar o no el backup del home del usuario?
 
 # Tamaño del backup
 
@@ -285,10 +276,10 @@ respaldo () {
   "$SUDO" "$RSYNC" $OPTS "$BACKUPDIR" "$DEST"
 
   printf "\n" 
-  printf "%s\n   %s\n\n" " - Respaldo en el usuario" "${usertmp}"
-  printf "%s\n   %s\n\n" " - Directorio Origen" "$BACKUPDIR"
-  printf "%s\n   %s\n\n" " - Directorio Destino" "$DEST"
-  printf "%s\n   %s\n\n" " - Comando y opciones ejecutadas (man rsync)" "rsync -h --progress --stats -r -tgo -p -l -D --update --delete-after --files-from=<<backup_user_dir.txt> <destino>"
+  printf " %s\n   %s\n\n" "- Respaldo en el usuario" "${usertmp}"
+  printf " %s\n   %s\n\n" "- Directorio Origen" "$BACKUPDIR"
+  printf " %s\n   %s\n\n" "- Directorio Destino" "$DEST"
+  printf " %s\n   %s\n\n" "- Comando y opciones ejecutadas (man rsync)" "rsync -h --progress --stats -r -tgo -p -l -D --update --delete-after --files-from=<<backup_user_dir.txt> <destino>"
 
   exit_success
 }
@@ -306,21 +297,20 @@ startornot () {
 # Ver / Editar archivo de configuración
 
 print_config () {
-  "$BATCAT" "${myhome}"/.ccbackupuser/ccbackupuser_conf
-  printf "\n%s\n> " "- Editar archivo de configuración? Si (s), No (n):"; read -r sino
-  if [ "$sino" = s ]; then
+  if [ -f "${myhome}/.ccbackupuser/ccbackupuser_conf" ]; then
     "$NANO" "${myhome}"/.ccbackupuser/ccbackupuser_conf
+  else
+    printf "\n  %s\n" "* (FALLO) ~/.ccbackupuser/ccbackupuser_conf no existe"
   fi
 }
 
 # Ver / Editar archivos que se respaldarán
 
 print_backup_files () {
-  "$BATCAT" "$FILES"
-  printf "\n%s\n> " "- Editar lista de archivos ha copiar? Si (s), No (n):"; read -r sino
-  
-  if [ "$sino" = s ]; then
-    "$NANO" "$FILES" 
+  if [ -f "$FILES" ]; then
+    "$NANO" "$FILES"
+  else
+    printf "\n  %s\n" "* (FALLO) ~/.ccbackupuser/backpup_user_dir.txt"
   fi
 }
 
@@ -344,9 +334,15 @@ ayuda () {
  Lista de archivos/directorios que respaldará
  ~/.ccbackupuser/backup_user_dir.txt
 
+ Si necesita regenerar los archivos de configuración
+ por algún motivo, borre el direcotiro
+ rm -fr ~/.ccbackupuser
+ Al ejecutar el script, volverá a generar
+ la configuración por defecto.
+
 
  El script requiere de los paquetes:
- rsync sudo batcat(bat) nano
+ rsync nano sudo
 
  Puede cambiar la ruta a estos programas si lo
  requiere en ~/.ccbackupuser/.ccbackupuser_conf
@@ -498,12 +494,15 @@ menu_header () {
   printf "%s\n" "   Respalda/Sincroniza en Local/Remoto"
   printf "%s\n\n" "-----------------------------------------"
 }
+
 menu_header
 check_user
 check_config
+
 if [ ! -f "${myhome}"/.ccbackupuser/ayuda.txt ]; then
   ayuda
 fi
+
 while true; do
   clear
  
@@ -519,14 +518,14 @@ while true; do
 
   # Opciones
   
-  printf "%s\n" "  1. Respaldar Archivos"
-  printf "%s\n" "  2. Ver/Editar Archivo de Configuración"
-  printf "%s\n" "  3. Ver/Editar Archivos que respaldará"
-  printf "%s\n" "  4. Tamaño de Archivos que se Respaldarán"
-  printf "%s\n" "  5. Respaldar configuración"
-  printf "%s\n" "  6. Ayuda"
-  printf "%s\n\n" "  7. Salir"
-  printf "%s" "Escoje una opción: "
+  printf "  %s\n" "1. Respaldar Archivos"
+  printf "  %s\n" "2. Ver/Editar Archivo de Configuración"
+  printf "  %s\n" "3. Ver/Editar Archivos que respaldará"
+  printf "  %s\n" "4. Tamaño de Archivos que se Respaldarán"
+  printf "  %s\n" "5. Respaldar configuración"
+  printf "  %s\n" "6. Ayuda"
+  printf "  %s\n\n" "7. Salir"
+  printf "  %s" "Escoje una opción: "
 
   read -r choice
 
