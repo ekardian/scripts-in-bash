@@ -62,8 +62,8 @@
 #        AUTHOR: Erwin Castedo <blkid@protonmail.com>
 #  ORGANIZATION: BIOS Tech <bioswork@gmail.com>
 #       CREATED: 2025/06/28 21:00
-#      REVISION: 2.6 (2026/10/20 18:55)
-#                removed batcat program 
+#      REVISION: 2.7 (2026/10/20 18:55)
+#                fixed comments and reload variables with source (.) 
 #
 #      DONATION: https://github.com/ekardian/dryncsnsx#donation
 #
@@ -91,9 +91,9 @@ aborted () {
 exit_script () {
   printf "\n"
   printf "%s\n" "--------------------------------------------------"
-  printf "  Script Terminado\n\n"
-  printf "  Donar\n"
-  printf "  https://github.com/ekardian/dryncsnsx#dontaino\n"
+  printf "  %s\n\n" "Script Terminado"
+  printf "  %s\n" "Donar"
+  printf "  %s\n" "https://github.com/ekardian/dryncsnsx#dontaino"
   printf "%s\n" "--------------------------------------------------"
   printf "\n"
   exit 
@@ -102,9 +102,9 @@ exit_script () {
 exit_success () {
   printf "\n"
   printf "%s\n" "--------------------------------------------------"
-  printf "  Script ejecutado satisfactoriamente\n\n"
-  printf "  Donar\n"
-  printf "  https://github.com/ekardian/dryncsnsx#dontaino\n"
+  printf "  %s\n\n" "Script ejecutado satisfactoriamente"
+  printf "  %s\n" "Donar"
+  printf "  %s\n" "https://github.com/ekardian/dryncsnsx#dontaino"
   printf "%s\n" "--------------------------------------------------"
   printf "\n"
   exit 0
@@ -144,7 +144,7 @@ check_user () {
     if [ ! "$cmdsudo" = 0 ]; then printf "\n  %s\n" "* (FALLO) El paquete sudo no está instalado"; exit_script; fi
     myhome=$(sudo -u "$usertmp" -H sh -c 'printf "$HOME\n"')
   else
-    printf "\n  * Usuario no existe\n    escriba un usuario existente o cree uno.\n\n"
+    printf "\n%s  \n\n" "  * Usuario ${usertmp} no existe."
     printf "Presione Enter para salir..."; read -r backtomenu
     exit_script
   fi
@@ -156,7 +156,7 @@ check_config () {
   CONFIG_FILE="${myhome}/.ccbackupuser/ccbackupuser_conf"
   
   if [ ! -f "$CONFIG_FILE" ];then
-    printf "\n  * (FALLO) ARCHIVO DE CONFIGURACIÓN\n\n"
+    printf "\n  %s\n\n" "* (FALLO) ARCHIVO DE CONFIGURACIÓN"
     divider="=============================="
     divider=$divider$divider$divider
     
@@ -228,7 +228,7 @@ EOF
       exit
     else
       printf "\n%s\n" "-------------------------------------------------------------------"
-      printf " Script Cancelado, se requiere generar el archivo de configuración\n"
+      printf " %s\n" "Script Cancelado, se requiere generar el archivo de configuración\n"
       printf "%s\n\n" "-------------------------------------------------------------------"
       exit 
     fi
@@ -532,6 +532,9 @@ while true; do
   case $choice in
     1)
       clear
+      
+      . "${myhome}"/.ccbackupuser/ccbackupuser_conf
+     
       menu_header
       printf "    1. Respaldar Archivos\n"
       check_packages
@@ -545,7 +548,7 @@ while true; do
             printf "  %s\n    %s\n\n  %s\n  %s\n  %s\n" "* (FALLO) Directorio destino no existe." "${DEST}"  "Revise la configuración:"  "/home/<user>/.ccbackupuser/ccbackupuser_conf"  "/home/<user>/.ccbackupuser/backup_user_dir.txt"
             printf "%s\n" "$li" 
 
-            printf "\n  Script Terminado.\n\n"
+            printf "  %s\n\n" "Script Terminado."
             exit 
           fi
           startornot
@@ -555,7 +558,7 @@ while true; do
           respaldo
         fi
       else
-        printf "\n * Configure el script y vuelva a ejecutarlo\n\n"
+        printf " %s\n\n" "* Configure el script y vuelva a ejecutarloi."
         exit_script
       fi
       ;;
@@ -575,6 +578,9 @@ while true; do
       ;;
     4)
       clear
+
+      . "${myhome}"/.ccbackupuser/ccbackupuser_conf
+
       menu_header
       printf "    4. Tamaño de Archivos que se Respaldarán\n"
       check_packages
@@ -597,11 +603,11 @@ while true; do
       exit_script
       ;;
     *)
-      printf "\n%s\n" "  * Opción inválida: Escoja entre 1 a 6"
+      printf "\n  %s\n" "* Opción inválida: Escoja entre 1 a 6"
       ;;
   esac
 
   printf "\n"
-  printf "%s\n" "  Presionar Enter para continuar ..."; read -r backtomenu
+  printf "%s  \n" "Presionar Enter para continuar ..."; read -r backtomenu
 
 done
