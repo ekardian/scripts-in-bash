@@ -173,7 +173,7 @@ check_config () {
       mkdir "${myhome}"/.ccbackupuser
       cd "${myhome}"/.ccbackupuser 
       cat << 'EOF' >> ccbackupuser_conf
-#!/bin/bash
+#!/usr/bin/sh
 
 # Directorio raiz desde dónde se empezará a hacer el backup
 #
