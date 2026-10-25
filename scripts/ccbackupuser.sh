@@ -329,7 +329,7 @@ ayuda () {
  configurar:
  
  Archivo de configuración
- ~/.ccbackupuser/ccbackup_conf
+ ~/.ccbackupuser/ccbackupuser_conf
 
  Lista de archivos/directorios que respaldará
  ~/.ccbackupuser/backup_user_dir.txt
