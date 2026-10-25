@@ -70,6 +70,9 @@ LISTA DE SCRIPTS
 ----------------
 
 - [ccbackupuser.sh](scripts/ccbackupuser.sh) - script en bash con rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Desde la segunda sincronización solos los archivos modificados son actualizados, sin borrar los otros archivos no modificados). Testeado en Linux Mint 21.2, Debian 12, Debian 13.
+- [ccbackupuser-gui.sh](scripts/ccbackupuser-gui.sh) - script en bash con cajas de diálogo (dialog) usando rsync para crear respaldos. Copia/Sincroniza archivos modificados.(Desde la segunda sincronización solos los archivos modificados son actualizados, sin borrar los otros archivos no modificados). Testeado en Linux Mint 21.2, Debian 12, Debian 13.
+<img width="734" height="432" alt="imagen" src="https://github.com/user-attachments/assets/938d8da0-2acc-4847-bf53-ca7f47acb293" />
+
 - [add-numbers-before-filename.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-filename.sh) - Add Letter and numbers before the file name for serialized files
 - [add-numbers-before-extension.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-before-extension.sh) - Add Letter and numbers before the extension for serialized files
 - [add-numbers-at-the-end-directory.sh](https://github.com/ekardian/scripts-in-bash/blob/main/scripts/add-numbers-at-the-end-directory.sh) Add Letter and numbers at the end directory
