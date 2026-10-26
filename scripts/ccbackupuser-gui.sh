@@ -63,7 +63,9 @@
 #        AUTHOR: Erwin Castedo <blkid@protonmail.com>
 #  ORGANIZATION: BIOS Tech <bioswork@gmail.com>
 #       CREATED: 2025/06/28 21:00
-#      REVISION: 1.0 (2026/10/25 00:51)
+#      REVISION: 1.1 (2026/10/25 21:59)
+#                added exit dialog boxes
+#                fixed help function
 #
 #      DONATION: https://github.com/ekardian/dryncsnsx#donation
 #
@@ -110,12 +112,48 @@ exit_success () {
   exit 0
 }
 
+exit_checkuser () {
+  dialog --title "Aviso" \
+    --backtitle "ccbackupuser-gui.sh" \
+    --stdout \
+    --yesno "Salir?" 0 0
+  exit_yesno=$?
+  case $exit_yesno in
+    0)
+      clear
+      exit_script
+      ;;
+    1|255)
+      check_user
+      ;;
+  esac
+}
+
+exit_askscript () {
+  dialog --title "Aviso" \
+    --backtitle "ccbackupuser-gui.sh" \
+    --stdout \
+    --yesno "Salir?" 0 0
+  exit_yesno=$?
+  case $exit_yesno in
+    0)
+      clear
+      exit_script
+      ;;
+    1|255)
+      menu 
+      ;;
+  esac
+}
+
+
 # Verificando si requerimientos de paquetes están instalados
 
 check_packages () {
-  whichdialog=$(command -v dialog); dialogcheck=$?
-  whichrsync=$(command -v rsync); rsynccheck=$?
-  whichsudo=$(command -v sudo); sudocheck=$?
+  command -v dialog; dialogcheck=$?
+  command -v rsync; rsynccheck=$?
+  command -v sudo; sudocheck=$?
+
   if [ ! "$dialogcheck" = 0 ] || [ ! "$rsynccheck" = 0 ] || [ ! "$sudocheck" = 0 ]; then
     printf "\n"
     printf "%s\n" "  ccbackupuser-gui.sh - Script para Respaldos con rsync"
@@ -140,8 +178,8 @@ check_user () {
   returntext=$(dialog --title "Usuario para respaldo" \
     --backtitle "ccbackupuser-gui.sh" \
     --stdout \
-    --form "Nombre de Usuario" 8 27 1 \
-    "Usuario:" 1 1 "" 1 10 10 0 \
+    --form "Usuario de sesión actual" 8 30 1 \
+    "Usuario:" 1 1 "" 1 10 14 20 \
   )
   exitcode=$?
 
@@ -172,8 +210,7 @@ check_user () {
       fi
       ;;
     1|255)
-      clear
-      exit_script
+      exit_checkuser
       ;;
   esac
 }
@@ -309,16 +346,6 @@ respaldo () {
   printf " %s\n   %s\n\n" "- Comando y opciones ejecutadas (man rsync)" "rsync -h --progress --stats -r -tgo -p -l -D --update --delete-after --files-from=<<backup_user_dir.txt> <destino>"
 
   exit_success
-}
-
-# Iniciando si copia a un archivo local o a un remoto
-
-startornot () {
-
-  "$MYDIALOG" --title "Respaldo de Archivos" \
-    --backtitle "ccbackupuser-gui.sh - Respaldo" \
-    --stdout \
-    --yestno "Iniciar Respaldo?" 0 0
 }
 
 # Ayuda
@@ -490,15 +517,6 @@ backup_config () {
 
 # Menu
 
-#menu_header () {
-#  printf "\n" 
-#  printf "%s\n" "-----------------------------------------"
-#  printf "%s\n" "  ccbackupuser-gui.sh - Respaldos con rsync"
-#  printf "%s\n" "   Respalda/Sincroniza en Local/Remoto"
-#  printf "%s\n\n" "-----------------------------------------"
-#}
-
-#menu_header
 check_packages
 check_user
 check_config
@@ -676,15 +694,14 @@ case $exitcode in
     esac
     ;;
   1|255)
-    clear
-    exit_script
+    exit_askscript
     ;;
   $DIALOG_HELP)
     clear
     "$MYDIALOG" --title "Ayuda" \
       --backtitle "ccbackupuser-gui.sh - Ayuda" \
       --stdout \
-      --textbox "${myhome}/.ccbackupuser-gui/ccbackupuser_conf" 0 0
+      --textbox "${myhome}/.ccbackupuser-gui/ayuda.txt" 0 0
     menu
     ;;
 esac
